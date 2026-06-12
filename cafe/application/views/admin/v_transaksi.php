@@ -212,11 +212,37 @@
 </div>
 
 <script>
-// ── Filter status ────────────────────────────
+// ── Filter status & pencarian ────────────────
+function filterDaftarTransaksi() {
+    var status = 'semua';
+    var activeBtn = document.querySelector('.btn-filter-status.active');
+    if (activeBtn) {
+        status = activeBtn.dataset.status;
+    }
+    
+    var pencarianInput = document.getElementById('pencarianTransaksi');
+    var query = pencarianInput ? pencarianInput.value.toLowerCase().trim() : '';
+
+    document.querySelectorAll('.row-transaksi').forEach(function(row) {
+        var matchesStatus = (status === 'semua' || row.dataset.status === status);
+        
+        // Cari teks di seluruh kolom baris
+        var matchesQuery = true;
+        if (query !== '') {
+            var text = row.textContent.toLowerCase();
+            matchesQuery = (text.indexOf(query) > -1);
+        }
+
+        if (matchesStatus && matchesQuery) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+}
+
 document.querySelectorAll('.btn-filter-status').forEach(function(btn) {
     btn.addEventListener('click', function() {
-        var status = this.dataset.status;
-
         // Update tombol aktif
         document.querySelectorAll('.btn-filter-status').forEach(function(b) {
             b.className = b.className
@@ -228,15 +254,16 @@ document.querySelectorAll('.btn-filter-status').forEach(function(btn) {
         this.classList.remove('btn-outline-secondary','btn-outline-success','btn-outline-warning');
         this.classList.add('btn-secondary','active');
 
-        // Filter baris tabel
-        document.querySelectorAll('.row-transaksi').forEach(function(row) {
-            if (status === 'semua' || row.dataset.status === status) {
-                row.style.display = '';
-            } else {
-                row.style.display = 'none';
-            }
-        });
+        filterDaftarTransaksi();
     });
+});
+
+// Event listener untuk input pencarian di navbar
+document.addEventListener("DOMContentLoaded", function() {
+    var pencarianInput = document.getElementById('pencarianTransaksi');
+    if (pencarianInput) {
+        pencarianInput.addEventListener('input', filterDaftarTransaksi);
+    }
 });
 
 // ── Modal Bayar ─────────────────────────────

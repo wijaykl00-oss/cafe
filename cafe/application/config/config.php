@@ -23,7 +23,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://localhost/PWL_SI24/cafe/';
+if (isset($_SERVER['HTTP_HOST'])) {
+	if (strpos($_SERVER['HTTP_HOST'], 'localhost') !== false) {
+		$config['base_url'] = 'http://localhost/PWL_SI24/cafe/';
+	} else {
+		$config['base_url'] = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/';
+	}
+} else {
+	$config['base_url'] = 'http://localhost/PWL_SI24/cafe/';
+}
 
 /*
 |--------------------------------------------------------------------------

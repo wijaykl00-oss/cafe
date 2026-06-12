@@ -88,9 +88,10 @@
                     </button>
 
                     <!-- Topbar Search -->
-                    <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                    <?php if ($this->uri->segment(1) == 'transaksi' && ($this->uri->segment(2) == '' || $this->uri->segment(2) == 'index')): ?>
+                    <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" onsubmit="return false;">
                         <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+                            <input type="text" id="pencarianTransaksi" class="form-control bg-light border-0 small" placeholder="Cari transaksi..."
                                 aria-label="Search" aria-describedby="basic-addon2">
                             <div class="input-group-append">
                                 <button class="btn btn-primary" type="button">
@@ -99,6 +100,7 @@
                             </div>
                         </div>
                     </form>
+                    <?php endif; ?>
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">

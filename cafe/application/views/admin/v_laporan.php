@@ -81,66 +81,51 @@
         </div>
     </div>
 
-    <!-- Grafik Penjualan -->
-    <?php if (!empty($per_hari)): ?>
+    <!-- Detail Penjualan per Hari -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Grafik Penjualan Harian</h6>
+            <h6 class="m-0 font-weight-bold text-primary">Detail Penjualan per Hari</h6>
         </div>
         <div class="card-body">
-            <div class="chart-area">
-                <canvas id="grafikLaporan"></canvas>
+            <?php if (empty($per_hari)): ?>
+                <p class="text-center text-muted py-3">Tidak ada data pada periode ini.</p>
+            <?php else: ?>
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover table-sm">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Tanggal</th>
+                            <th class="text-center">Jumlah Transaksi</th>
+                            <th class="text-right">Total Pendapatan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($per_hari as $row): ?>
+                        <tr>
+                            <td><?php echo date('D, d M Y', strtotime($row['tgl'])); ?></td>
+                            <td class="text-center"><?php echo $row['jumlah']; ?></td>
+                            <td class="text-right">Rp <?php echo number_format($row['total'], 0, ',', '.'); ?></td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                    <tfoot class="font-weight-bold">
+                        <tr>
+                            <td>TOTAL</td>
+                            <td class="text-center"><?php echo array_sum(array_column($per_hari, 'jumlah')); ?></td>
+                            <td class="text-right">Rp <?php echo number_format(array_sum(array_column($per_hari, 'total')), 0, ',', '.'); ?></td>
+                        </tr>
+                    </tfoot>
+                </table>
             </div>
+            <?php endif; ?>
         </div>
     </div>
-    <?php endif; ?>
 
+    <!-- Metode Bayar & Menu Terlaris (Kanan Kiri) -->
     <div class="row">
-        <!-- Penjualan per Hari -->
-        <div class="col-lg-8 mb-4">
-            <div class="card shadow">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Detail Penjualan per Hari</h6>
-                </div>
-                <div class="card-body">
-                    <?php if (empty($per_hari)): ?>
-                        <p class="text-center text-muted py-3">Tidak ada data pada periode ini.</p>
-                    <?php else: ?>
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-hover table-sm">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th>Tanggal</th>
-                                    <th class="text-center">Jumlah Transaksi</th>
-                                    <th class="text-right">Total Pendapatan</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($per_hari as $row): ?>
-                                <tr>
-                                    <td><?php echo date('D, d M Y', strtotime($row['tgl'])); ?></td>
-                                    <td class="text-center"><?php echo $row['jumlah']; ?></td>
-                                    <td class="text-right">Rp <?php echo number_format($row['total'], 0, ',', '.'); ?></td>
-                                </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                            <tfoot class="font-weight-bold">
-                                <tr>
-                                    <td>TOTAL</td>
-                                    <td class="text-center"><?php echo array_sum(array_column($per_hari, 'jumlah')); ?></td>
-                                    <td class="text-right">Rp <?php echo number_format(array_sum(array_column($per_hari, 'total')), 0, ',', '.'); ?></td>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-                    <?php endif; ?>
-                </div>
-            </div>
-        </div>
-
-        <!-- Metode Bayar -->
-        <div class="col-lg-4 mb-4">
-            <div class="card shadow mb-4">
+        <!-- Per Metode Bayar -->
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow h-100">
                 <div class="card-header py-3">
                     <h6 class="m-0 font-weight-bold text-primary">Per Metode Bayar</h6>
                 </div>
@@ -164,9 +149,11 @@
                     <?php endif; ?>
                 </div>
             </div>
+        </div>
 
-            <!-- Menu Terlaris -->
-            <div class="card shadow">
+        <!-- Menu Terlaris -->
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow h-100">
                 <div class="card-header py-3">
                     <h6 class="m-0 font-weight-bold text-primary">Menu Terlaris</h6>
                 </div>
@@ -206,6 +193,20 @@
         </div>
     </div>
 
+    <!-- Grafik Penjualan Harian -->
+    <?php if (!empty($per_hari)): ?>
+    <div class="card shadow mb-4 no-print">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Grafik Penjualan Harian</h6>
+        </div>
+        <div class="card-body">
+            <div class="chart-area">
+                <canvas id="grafikLaporan"></canvas>
+            </div>
+        </div>
+    </div>
+    <?php endif; ?>
+
 </div>
 <!-- /.container-fluid -->
 
@@ -241,7 +242,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 <style>
 @media print {
-    .sidebar, .topbar, .scroll-to-top, nav, footer, form, button, a.btn { display: none !important; }
+    .sidebar, .topbar, .scroll-to-top, nav, footer, form, button, a.btn, .no-print { display: none !important; }
     #content-wrapper { margin: 0 !important; }
     .card { box-shadow: none !important; border: 1px solid #ddd !important; }
 }
