@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "functions": {
+    "cafe/api/index.php": {
+      "runtime": "vercel-php@0.7.3"
+    }
+  },
+  "routes": [
+    {
+      "src": "/(assets|uploads)/(.*)",
+      "dest": "/cafe/$1/$2"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/cafe/api/index.php"
+    }
+  ]
+}
